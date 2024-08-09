@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 所有 pom.xml 的根元素，同时声明一些 pom 相关的命名空间及 xsd 元素-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--  指定 POM 模型版本  -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--  定义一个项目的基本坐标  -->
+    <groupId>com.example</groupId>
+    <artifactId>langchain4j-springboot-examples</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+</project>
