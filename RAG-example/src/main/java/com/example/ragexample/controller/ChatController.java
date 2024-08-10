@@ -8,7 +8,6 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.internal.Utils;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.service.Result;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
@@ -39,7 +38,6 @@ class ChatController implements InitializingBean {
     @GetMapping("/ai/assistant")
     String assistant(@RequestParam(defaultValue = "What can you do for me?") String message) {
         String response = assistantService.chat(message);
-        log.info("Received message: {}, generated response: {}", message, response);
         return response;
     }
 
