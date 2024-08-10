@@ -1,6 +1,6 @@
 ### 测试接口
 ### assistant
-GET localhost:8080/ai/assistant?message=John的成就有哪些?
+GET localhost:8080/ai/assistant/2?message=John住在哪里?
 
 #返回：
 #根据文本，John的成就包括：
@@ -16,3 +16,19 @@ GET localhost:8080/ai/answer?question=John的成就有哪些？
 #  "sources": "Content { textSegment = TextSegment { text = \"Philanthropy and Personal Life\nJohn Doe's success in business and literature was matched by his commitment to philanthropy.\nHe established the \"Doe Foundation\" to support education and environmental initiatives.\nHis efforts earned him various humanitarian awards.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=10} } }Content { textSegment = TextSegment { text = \"As he often says, \"Innovation is the intersection of imagination and reality.\"\nJohn Doe's life is a testament to this belief, a blend of the fantastical and the tangible,\nmaking him not just a figure of success, but a symbol of the limitless potential of the human spirit.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=13} } }Content { textSegment = TextSegment { text = \"Legacy\nJohn Doe's legacy is multifaceted: a pioneering engineer, a celebrated author, and a dedicated philanthropist.\nHis contributions to technology and literature have left an indelible mark on the world,\ninspiring countless individuals to pursue their dreams with passion and determination.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=12} } }Content { textSegment = TextSegment { text = \"Early Life and Education\nJohn Doe was born on April 1, 1980, in the quaint town of Fictionville, USA.\nThe only child of Jane and Joe Doe, he exhibited an early inclination towards creativity and innovation.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=1} } }Content { textSegment = TextSegment { text = \"In his personal life, John is known to be a private individual.\nHe married his college sweetheart, Emily, and they have two children.\nThe family resides in a sustainable home in Fictionville, where Doe enjoys gardening and mentoring young entrepreneurs.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=11} } }Content { textSegment = TextSegment { text = \"Growing up, John was fascinated by the stories his mother, a local librarian, would read to him,\nwhich sparked his love for literature and storytelling.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=2} } }Content { textSegment = TextSegment { text = \"His success in business was paralleled by his literary accomplishments; he published his debut novel,\n\"The Inventor's Dilemma,\" which became a bestseller.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=9} } }Content { textSegment = TextSegment { text = \"National Young Innovators Award.\nThis achievement earned him a scholarship to Prestige University, where he majored in Mechanical Engineering\nand minored in Creative Writing.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=4} } }Content { textSegment = TextSegment { text = \"John Doe: An Imaginary Luminary\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=0} } }Content { textSegment = TextSegment { text = \"However, his love for writing never waned.\nIn his spare time, John wrote short stories, many of which were published in esteemed literary magazines.\nHis unique blend of scientific knowledge and creative storytelling earned him a devoted following.\" metadata = {absolute_directory_path=/Users/louye/IdeaProjects/LangChain4j-SpringBoot-Examples/RAG-example/target/classes/documents, file_name=biography-of-john-doe.txt, index=7} } }",
 #  "answer": "根据John Doe的成就信息，他实现了以下成功：\n\n1. 在商业和文学领域取得巨大成功\n2. 成为一名先锋工程师，也是位受到欢迎和畅销的作家\n3. 设立了慈善机构“Doe基金会”，支持教育和环境倡导 initiative \n4. 获得了各种人道主义奖项 \n5. 在全球范围内发挥了对技术和文学的影响力 \n6. 魅力十足的人物，在全球范围内影响众多个体鼓舞其他人的热情 \n7. 成为一名私下中的经商家，但在家庭生活中，他是幸福 \n8. 成为一位畅销作家和前辈的慷慨捐助者"
 #}
+
+### uploadFile
+POST localhost:8080/ai/upload/2
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+### chatWithFile
+GET localhost:8080/ai/chatWithFile/2?question=主要讲了什么&fileName=test.txt
+# 这个故事主要讲的是关于一个普通人和他的母亲，他们是如何祈求到神将他们变成两头羊驼（llama）的。
+
+### 清空记录
+POST localhost:8080/ai/clearMemory/1
+# success

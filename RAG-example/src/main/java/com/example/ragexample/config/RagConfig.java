@@ -1,14 +1,9 @@
 package com.example.ragexample.config;
 
-import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentParser;
-import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.parser.TextDocumentParser;
-import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.data.embedding.Embedding;
+import com.example.ragexample.service.store.PersistentChatMemoryStore;
+import com.example.ragexample.util.CommonUtil;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.internal.Utils;
-import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -17,22 +12,20 @@ import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
+import dev.langchain4j.store.embedding.filter.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
-import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
+import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 
 @Configuration
 public class RagConfig {
@@ -47,32 +40,10 @@ public class RagConfig {
         return new AllMiniLmL6V2EmbeddingModel();
     }
 
+    //用于压缩查询语句
     @Bean
     public CompressingQueryTransformer compressingQueryTransformer(ChatLanguageModel chatLanguageModel) {
         return new CompressingQueryTransformer(chatLanguageModel);
-    }
-
-    public static Path toPath(String relativePath) {
-        try {
-            URL fileUrl = Utils.class.getClassLoader().getResource(relativePath);
-            return Paths.get(fileUrl.toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    private static EmbeddingStore<TextSegment> embed(Path documentPath, EmbeddingModel embeddingModel, EmbeddingStore<TextSegment> embeddingStore) {
-        DocumentParser documentParser = new TextDocumentParser();
-        Document document = loadDocument(documentPath, documentParser);
-
-        DocumentSplitter splitter = DocumentSplitters.recursive(300, 0);
-        List<TextSegment> segments = splitter.split(document);
-
-        List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
-
-        embeddingStore.addAll(embeddings, segments);
-        return embeddingStore;
     }
 
     @Bean
@@ -82,7 +53,7 @@ public class RagConfig {
 
         // Let's create a separate embedding store specifically for biographies.
         EmbeddingStore<TextSegment> biographyEmbeddingStore =
-                embed(toPath("documents/biography-of-john-doe.txt"), embeddingModel, embeddingStore);
+                CommonUtil.embed(CommonUtil.toPath("documents/biography-of-john-doe.txt"), embeddingModel, embeddingStore);
         ContentRetriever biographyContentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(biographyEmbeddingStore)
                 .embeddingModel(embeddingModel)
@@ -92,7 +63,7 @@ public class RagConfig {
 
         // Additionally, let's create a separate embedding store dedicated to terms of use.
         EmbeddingStore<TextSegment> termsOfUseEmbeddingStore =
-                embed(toPath("documents/miles-of-smiles-terms-of-use.txt"), embeddingModel, embeddingStore);
+                CommonUtil.embed(CommonUtil.toPath("documents/miles-of-smiles-terms-of-use.txt"), embeddingModel, embeddingStore);
         ContentRetriever termsOfUseContentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(termsOfUseEmbeddingStore)
                 .embeddingModel(embeddingModel)
@@ -112,7 +83,27 @@ public class RagConfig {
 
 
     @Bean
-    public ChatMemory chatMemory() {
-        return MessageWindowChatMemory.withMaxMessages(10);
+    public ChatMemoryProvider chatMemoryProvider(PersistentChatMemoryStore persistentChatMemoryStore) {
+        ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
+                .id(memoryId)
+                .maxMessages(10)
+                .chatMemoryStore(persistentChatMemoryStore)
+                .build();
+        return chatMemoryProvider;
+    }
+
+    @Bean
+    public ContentRetriever filterContentRetriever(EmbeddingStore embeddingStore,
+                                            EmbeddingModel embeddingModel) {
+        Function<Query, Filter> filterByUserId =
+                (query) -> metadataKey("userId").isEqualTo(query.metadata().chatMemoryId().toString());
+
+        ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore)
+                .embeddingModel(embeddingModel)
+                // 动态过滤, 只检索MemoryId等于当前用户id的文档数据
+                .dynamicFilter(filterByUserId)
+                .build();
+        return contentRetriever;
     }
 }
