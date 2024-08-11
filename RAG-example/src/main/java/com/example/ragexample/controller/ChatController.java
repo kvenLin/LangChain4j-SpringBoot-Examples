@@ -39,8 +39,7 @@ class ChatController {
     @GetMapping("/ai/assistant/{userId}")
     String assistant(@RequestParam(defaultValue = "What can you do for me?") String message,
                      @PathVariable("userId") Long userId) {
-        String response = assistantService.chat(userId, message);
-        return response;
+        return assistantService.chat(userId, message);
     }
 
     @ResponseBody
@@ -48,8 +47,7 @@ class ChatController {
     Map<String, Object> assistantWithSource(@RequestParam(defaultValue = "What is the meaning of life?") String question,
                                             @PathVariable("userId") Long userId) {
         Result<String> answer = assistantService.chatWithSource(userId, question);
-        Map<String, Object> result = Map.of("answer", answer.content(), "sources", answer.sources().stream().map(Object::toString).collect(Collectors.joining(",")));
-        return result;
+        return Map.of("answer", answer.content(), "sources", answer.sources().stream().map(Object::toString).collect(Collectors.joining(",")));
     }
 
     @GetMapping("/ai/chatWithFile/{userId}")

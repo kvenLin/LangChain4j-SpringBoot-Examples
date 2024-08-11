@@ -1,6 +1,6 @@
 ### 测试接口
 ### assistant
-GET localhost:8080/ai/assistant/2?message=John住在哪里?
+GET localhost:8080/ai/assistant/2?message=John的成就有哪些?
 
 #返回：
 #根据文本，John的成就包括：

@@ -1,0 +1,2 @@
+### dbAssistant
+GET localhost:8081/ai/dbAssistant?message=你能做什么
