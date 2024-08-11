@@ -16,7 +16,6 @@ import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.rag.query.router.LanguageModelQueryRouter;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
 import dev.langchain4j.store.embedding.filter.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,11 +28,6 @@ import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metad
 
 @Configuration
 public class RagConfig {
-
-    @Bean
-    public EmbeddingStore embeddingStore(ElasticsearchEmbeddingStore elasticsearchEmbeddingStore) {
-        return elasticsearchEmbeddingStore;
-    }
 
     @Bean
     public EmbeddingModel embeddingModel() {

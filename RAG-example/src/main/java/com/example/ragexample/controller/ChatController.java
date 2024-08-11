@@ -1,12 +1,9 @@
 package com.example.ragexample.controller;
 
-import cn.hutool.core.io.FileUtil;
 import com.example.ragexample.service.aiservice.AssistantService;
 import com.example.ragexample.service.aiservice.ChatWithFileService;
 import com.example.ragexample.service.store.PersistentChatMemoryStore;
-import com.example.ragexample.util.CommonUtil;
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
@@ -19,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.stream.Collectors;
