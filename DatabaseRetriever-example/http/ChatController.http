@@ -1,2 +1,14 @@
 ### dbAssistant
-GET localhost:8081/ai/dbAssistant?message=你能做什么
+GET localhost:8081/ai/dbAssistant?message=查看user表用户名为test的数据
+
+#根据您的要求，我执行了一次 SQL 命令：
+#
+#`SELECT * FROM user WHERE name = 'test';`
+#
+#得到以下结果：
+#
+#| id | name | email                  | password  | created_at               | updated_at               |
+#|----|------|------------------------|-----------|--------------------------|--------------------------|
+#| 2  | test | test@test                | 123456     | 2024-08-10T06:52:55       | 2024-08-10T06:52:55       |
+#
+#您能看到了吧？

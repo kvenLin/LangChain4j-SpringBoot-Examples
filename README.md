@@ -26,11 +26,14 @@ langchain4j.open-ai.chat-model.model-name=${your-openai-model-name:llama3.1:late
 ```text
 |-- RAG-example                                  # RAG文档知识库应用场景示例
 |   |-- http                                     # 示例http接口
-|   |-- RAG_READEME.md                           # RAG文档知识库应用场景示例说明
+|   |-- RAG_README.md                           # RAG文档知识库应用场景示例说明
+|-- DatabaseRetriever-example                    # 自然语言交互MySQL数据查询应用场景示例
+|   |-- http                                     # 示例http接口
+|   |-- DatabaseRetriever_README.md              # 自然语言交互MySQL数据查询应用场景示例说明
 |-- (持续完善中...)
 ```
 * [RAG文档知识库应用场景示例](RAG-example/RAG_README.md)
-* 自然语言交互MySQL数据查询应用场景示例(持续完善中...)
+* [自然语言交互MySQL数据查询应用场景示例](DatabaseRetriever-example/DatabaseRetriever_README.md)
 * Tool(function calling) 内置工具调用应用场景示例(持续完善中...)
 * 图像生成(持续完善中...)
 * SseEmitter的流式输出效果(持续完善中...)
