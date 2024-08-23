@@ -1,0 +1,7 @@
+GET http://localhost:8080/ai/chat?query=中国在巴黎奥运会表现的怎么样
+
+#Based on the information provided by Tavily Search API, I can format an answer to the original question:
+#
+#"中国在巴黎奥運會表现的怎么样?"
+#
+#中国在2024年巴黎奥运会上斩获了40金27银24铜共91枚奖牌，展现出出色的运动成绩和团队精神。
